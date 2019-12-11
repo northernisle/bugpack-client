@@ -1,0 +1,19 @@
+@import '../../../utils/styles/variables';
+
+.text {
+  display: flex;
+  align-items: center;
+  color: $light;
+  text-decoration: none;
+  transition: all .3s;
+  padding: 0 10px;
+  height: 100%;
+
+  &:hover {
+    background-color: $secondary;
+  }
+}
+
+.active {
+  background-color: $secondary;
+}
