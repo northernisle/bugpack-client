@@ -1,8 +1,9 @@
 import React from 'react';
+import styles from './login.module.scss';
 
 const Login = () => {
   return (
-    <div>
+    <div className={styles.container}>
       Login
     </div>
   );
