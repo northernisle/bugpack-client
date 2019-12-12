@@ -3,12 +3,12 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import routes from '../routes';
 import Header from '../../components/Header';
 import { ThemeProvider } from '@material-ui/core';
-import theme from '../../utils/styles/theme';
+import settings from '../../utils/styles/muiSettings';
 
 const App = () => {
   return (
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={settings}>
         <Header />
         {routes.map((route, index) =>
           <Route
