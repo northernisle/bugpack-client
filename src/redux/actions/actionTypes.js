@@ -1,0 +1,2 @@
+export const AUTH_TOKEN_SET = 'AUTH_TOKEN_SET';
+export const AUTH_TOKEN_GET = 'AUTH_TOKEN_GET';

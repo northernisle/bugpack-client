@@ -4,8 +4,14 @@ import routes from '../routes';
 import Header from '../../components/Header';
 import { ThemeProvider } from '@material-ui/core';
 import settings from '../../utils/styles/muiSettings';
+import { connect } from 'react-redux';
+import { getAuthToken } from '../../redux/actions';
 
-const App = () => {
+const App = ({ getAuthToken }) => {
+  React.useEffect(() => {
+    getAuthToken();
+  }, [getAuthToken]);
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={settings}>
@@ -23,4 +29,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default connect(undefined, { getAuthToken })(App);

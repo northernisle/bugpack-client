@@ -2,15 +2,17 @@ import React from 'react';
 import axios from 'axios';
 import { Button, CircularProgress } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import PasswordField from '../../components/PasswordField';
 import TextInput from '../../components/Forms/TextInput';
 import validators from '../../utils/validators';
 import { useComplexState } from '../../utils/hooks';
+import { setAuthToken } from '../../redux/actions';
 
 import styles from './join.module.scss';
 
-const Join = () => {
+const Join = props => {
   const [valid, setValid] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [registered, setRegistered] = React.useState(false);
@@ -57,9 +59,13 @@ const Join = () => {
         password: state.password.properties.value
       });
 
-      window.localStorage.setItem('authToken', data.token);
+      props.setAuthToken(data.token);
       setRegistered(true);
     }
+  }
+
+  if (registered) {
+    return <Redirect to='/' />
   }
 
   return (
@@ -74,6 +80,7 @@ const Join = () => {
             variant='filled'
             state={state.username}
             validate={() => validateField('username')}
+            enterPressed={submit}
           />
           <TextInput
             required
@@ -82,32 +89,24 @@ const Join = () => {
             variant='filled'
             state={state.email}
             validate={() => validateField('email')}
+            enterPressed={submit}
           />
           <PasswordField
+            required
             state={state.password}
             validate={() => validateField('password')}
+            enterPressed={submit}
           />
           <p className={styles.signInMessage}>
             Have an account? <Link className={styles.signInLink} to='/login'>Sign in.</Link>
           </p>
           <Button variant='outlined' color='primary' onClick={submit} size='large'>
-            {
-              !loading &&
-              'Sign up'
-            }
-            {
-              loading &&
-              <CircularProgress size={25} />
-            }
+            { loading ? <CircularProgress size={25} /> : 'Sign up' }
           </Button>
         </div>
       </div>
-      {
-        registered &&
-        <Redirect to='/' />
-      }
     </div>
   );
 };
 
-export default Join;
+export default connect(undefined, { setAuthToken })(Join);

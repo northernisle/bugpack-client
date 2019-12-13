@@ -1,17 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import styles from './headerprofile.module.scss';
 
-const HeaderProfile = () => {
-  const [authenticated, setAuthenticated] = React.useState(false);
-
-  React.useEffect(() => {
-    const token = window.localStorage.getItem('authToken');
-    setAuthenticated(!!token);
-
-  }, []);
-
-  if (authenticated) {
+const HeaderProfile = ({ token }) => {
+  if (!!token) {
     return <div>Logout</div>
   }
 
@@ -23,4 +16,8 @@ const HeaderProfile = () => {
   );
 };
 
-export default HeaderProfile;
+const mapStateToProps = state => {
+  return { token: state.authToken };
+}
+
+export default connect(mapStateToProps)(HeaderProfile);
