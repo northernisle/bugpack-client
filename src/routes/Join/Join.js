@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { Button, CircularProgress } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -9,11 +8,11 @@ import TextInput from '../../components/Forms/TextInput';
 import validators from '../../utils/validators';
 import { useComplexState } from '../../utils/hooks';
 import { setAuthToken } from '../../redux/actions';
+import axios from '../../utils/configs/axiosConfig';
 
 import styles from './join.module.scss';
 
 const Join = props => {
-  const [valid, setValid] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [registered, setRegistered] = React.useState(false);
 
@@ -41,19 +40,20 @@ const Join = props => {
         return;
     }
 
-    setValid(!message);
     state[field].setState({ message });
+    return !message;
   }
 
   const submit = async () => {
+    let valid = 0;
     for (const field in state) {
-      await validateField(field);
+      valid += await validateField(field);
     }
 
-    if (valid) {
-      // TODO: Refactor this to be more scalable
+    if (valid === 3) {
       setLoading(true);
-      const { data } = await axios.post('http://localhost:3001/users', {
+
+      const { data } = await axios.post('users', {
         name: state.username.properties.value,
         email: state.email.properties.value,
         password: state.password.properties.value
