@@ -1,24 +1,3 @@
-.container {
-  width: 100%;
-  height: calc(100vh - 80px);
-  display: flex;
-  flex-direction: row;
-  background-color: #e6e6fa;
-  justify-content: center;
-  align-items: center;
-}
-
-.formContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 500px;
-  height: 100%;
-  background-color: #fff;
-}
-
 .form {
   width: 80%;
   display: flex;
@@ -36,4 +15,5 @@
 
 .signInLink {
   text-decoration: none;
+  color: #f4816d;
 }

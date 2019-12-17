@@ -3,3 +3,12 @@
 body {
   font-family: $font;
 }
+
+// would be great to move this to muiSettings.js
+.Mui-error {
+  color: $secondary !important;
+
+  &:after {
+    border-bottom-color: $secondary !important;
+  }
+}

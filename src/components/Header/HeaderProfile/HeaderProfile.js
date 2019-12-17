@@ -13,9 +13,7 @@ const HeaderProfile = ({ token, removeAuthToken }) => {
     <div className={styles.container}>
       {
         !!token ?
-          <>
-            <div className={styles.item} onClick={logout}>Logout</div>
-          </>
+          <div className={styles.item} onClick={logout}>Logout</div>
           :
           <>
             <Link to='/login' className={styles.item}>Sign in</Link>

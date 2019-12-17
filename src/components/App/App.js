@@ -1,11 +1,12 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import routes from '../../routes/routes';
 import Header from '../Header';
 import { ThemeProvider } from '@material-ui/core';
 import settings from '../../utils/styles/muiSettings';
 import { connect } from 'react-redux';
 import { getAuthToken } from '../../redux/actions';
+import RenderRoutes from '../RenderRoutes';
 
 const App = ({ getAuthToken }) => {
   React.useEffect(() => {
@@ -16,14 +17,7 @@ const App = ({ getAuthToken }) => {
     <BrowserRouter>
       <ThemeProvider theme={settings}>
         <Header />
-        {routes.map((route, index) =>
-          <Route
-            key={index}
-            path={route.path}
-            component={route.component}
-            exact={route.exact}
-          />
-        )}
+        <RenderRoutes routes={routes} />
       </ThemeProvider>
     </BrowserRouter>
   );
