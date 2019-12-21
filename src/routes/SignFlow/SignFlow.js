@@ -1,111 +1,92 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
-import PasswordField from '../../components/PasswordField';
 import TextInput from '../../components/Forms/TextInput';
-import LoadingButton from '../../components/LoadingButton';
+import PasswordInput from '../../components/Forms/PasswordInput';
 import validators from '../../utils/validators';
-import { useComplexState } from '../../utils/hooks';
+import LoadingButton from '../../components/LoadingButton';
 
 import styles from './signInFlow.module.scss';
 
 const SignFlow = ({ header, messageSlot, hideUsername, submitCallback, errorMessage }) => {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
-  React.useEffect(() => {
-    if (!errorMessage) {
-      return;
+  const formRefs = {
+    username: useRef(),
+    email: useRef(),
+    password: useRef()
+  };
+
+  const submit = async (e) => {
+    e && e.preventDefault();
+    setLoading(true);
+
+    const refArray = Object.values(formRefs);
+
+    if (hideUsername) {
+      refArray.shift();
     }
 
-    setLoading(!errorMessage);
-  }, [errorMessage, loading]);
+    const validationArray = refArray.map(ref => ref.current.validate());
+    const formValid = !(await Promise.all(validationArray)).includes(false);
 
-  const formStateObject = { value: '', message: null };
-  const state = {
-    username: useComplexState(formStateObject),
-    email: useComplexState(formStateObject),
-    password: useComplexState(formStateObject)
-  }
+    if (formValid && submitCallback) {
+      const valueArray = refArray.map(ref => ref.current.value);
 
-  const validateField = async (field) => {
-    let message = null;
-    const value = state[field].properties.value;
-    switch (field) {
-      case 'username':
-        message = hideUsername ? null : validators.between(value, field, 3, 25);
-        break;
-      case 'email':
-        message = await validators.validEmail(value);
-        break;
-      case 'password':
-        message = validators.between(value, field, 8, 25);
-        break;
-      default:
-        return;
+      if (hideUsername) {
+        const [email, password] = valueArray;
+        submitCallback({ email, password });
+      } else {
+        const [username, email, password] = valueArray;
+        submitCallback({ username, email, password });
+      }
     }
-
-    state[field].setState({ message });
-    return !message;
-  }
-
-  const submit = async () => {
-    let valid = 0;
-    for (const field in state) {
-      valid += await validateField(field);
-    }
-
-    if (valid === Object.keys(state).length) {
-      submitCallback({
-        username: state.username.properties.value,
-        email: state.email.properties.value,
-        password: state.password.properties.value
-      });
-      setLoading(true);
-    }
+    setLoading(false);
   }
 
   return (
     <>
       <h1>{header}</h1>
-      <div className={styles.form}>
+      <form className={styles.form} noValidate='novalidate'>
         {
           !hideUsername &&
           <TextInput
-            className={styles.input}
             required
+            id='username'
             type='text'
             label='Username'
             variant='filled'
-            state={state.username}
-            validate={() => validateField('username')}
-            enterPressed={submit}
+            className={styles.input}
+            ref={formRefs.username}
+            validation={(value, field) => validators.between(value, field, 3, 25)}
           />
         }
         <TextInput
-          className={styles.input}
           required
+          id='email'
           type='email'
           label='Email'
           variant='filled'
-          state={state.email}
-          validate={() => validateField('email')}
-          enterPressed={submit}
-        />
-        <PasswordField
           className={styles.input}
+          ref={formRefs.email}
+          validation={(value) => validators.validEmail(value, !hideUsername)}
+        />
+        <PasswordInput
           required
-          state={state.password}
-          validate={() => validateField('password')}
-          enterPressed={submit}
+          id='password'
+          label='Password'
+          className={styles.input}
+          ref={formRefs.password}
+          validation={(value, field) => validators.between(value, field, 8, 25)}
         />
         {messageSlot}
         <div className={styles.button}>
-          <LoadingButton text={'Sign up'} loading={loading} onClick={submit} />
+          <LoadingButton text={'Sign up'} loading={loading} onClick={e => submit(e)} />
         </div>
         {
           errorMessage &&
           <p className={styles.error}>{errorMessage}</p>
         }
-      </div>
+      </form>
     </>
   );
 };

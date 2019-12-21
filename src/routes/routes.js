@@ -19,19 +19,14 @@ const routes = [
     component: SignTemplate,
     children: [
       {
-        component: SignTemplate,
-        children: [
-          {
-            path: '/login',
-            component: Login,
-            exact: true,
-          },
-          {
-            path: '/join',
-            component: Join,
-            exact: true
-          }
-        ]
+        path: '/login',
+        component: Login,
+        exact: true,
+      },
+      {
+        path: '/join',
+        component: Join,
+        exact: true
       }
     ]
   }

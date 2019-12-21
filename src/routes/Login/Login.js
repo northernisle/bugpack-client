@@ -24,7 +24,7 @@ const Login = ({ setAuthToken }) => {
       setAuthToken(data.token);
       setLoggedIn(true);
     } catch (e) {
-      setErrorMessage('Coulnd\'t find an account matching those credentials.');
+      setErrorMessage('Couldn\'t find an account matching those credentials.');
     }
   }
 

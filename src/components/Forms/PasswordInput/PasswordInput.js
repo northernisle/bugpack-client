@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { forwardRef, useRef, useImperativeHandle } from 'react';
 import { InputAdornment, IconButton } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import TextInput from '../../components/Forms/TextInput';
+import TextInput from '../TextInput';
 
-const PasswordField = props => {
+const PasswordInput = forwardRef((props, ref) => {
+  const inputRef = useRef();
+
   const [showPassword, setShowPassword] = React.useState(false);
+
+  useImperativeHandle(ref, () => ({
+    validate: () => inputRef.current.validate(),
+    value: inputRef.current.value
+  }));
 
   return (
     <TextInput
@@ -12,6 +19,7 @@ const PasswordField = props => {
       id='password'
       label='Password'
       variant='filled'
+      ref={inputRef}
       type={showPassword ? 'text' : 'password'}
       InputProps={{
         endAdornment:
@@ -27,6 +35,6 @@ const PasswordField = props => {
       }}
     />
   );
-}
+});
 
-export default PasswordField;
+export default PasswordInput;

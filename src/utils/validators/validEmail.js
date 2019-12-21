@@ -1,12 +1,22 @@
 import validator from 'validator';
-// import axios from 'axios';
+import axios from '../configs/axiosConfig';
 
-export default async (email) => {
+let timer;
+
+export default (email, verifyUniqueness = true) => new Promise((resolve, _reject) => {
   if (!validator.isEmail(email)) {
-    return 'Please enter a valid email address';
+    return resolve('Please enter a valid email address');
   }
-  
-  // TODO: Add a remote validation to check email availability
 
-  return null;
-}
+  if (!verifyUniqueness) {
+    return resolve(null);
+  }
+
+  clearTimeout(timer);
+  timer = setTimeout(async () => {
+    const { data: emailOccupied } = await axios.post('/users/emailOccupied', { email });
+
+    let error = emailOccupied ? 'Email already taken' : null;
+    return resolve(error);
+  }, 300);
+});
