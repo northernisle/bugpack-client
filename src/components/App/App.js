@@ -5,13 +5,13 @@ import Header from '../Header';
 import { ThemeProvider } from '@material-ui/core';
 import settings from '../../utils/styles/muiSettings';
 import { connect } from 'react-redux';
-import { getAuthToken } from '../../redux/actions';
+import { getAuthUser } from '../../redux/actions';
 import RenderRoutes from '../RenderRoutes';
 
-const App = ({ getAuthToken }) => {
+const App = ({ getAuthUser }) => {
   React.useEffect(() => {
-    getAuthToken();
-  }, [getAuthToken]);
+    getAuthUser();
+  }, [getAuthUser]);
 
   return (
     <BrowserRouter>
@@ -23,4 +23,4 @@ const App = ({ getAuthToken }) => {
   );
 }
 
-export default connect(undefined, { getAuthToken })(App);
+export default connect(undefined, { getAuthUser })(App);

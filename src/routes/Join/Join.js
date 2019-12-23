@@ -1,33 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { setAuthToken } from '../../redux/actions';
-import axios from '../../utils/configs/axiosConfig';
+import { registerUser } from '../../redux/actions';
 import SignFlow from '../SignFlow';
 
 import styles from './join.module.scss';
 
-const Join = ({ setAuthToken }) => {
-  const [registered, setRegistered] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState(null);
+const Join = ({ registerUser, authUser }) => {
+  const [registered, setRegistered] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    if (!authUser) {
+      return;
+    }
+
+    if (!authUser.pending) {
+      if (authUser.error) {
+        setErrorMessage('Something went terribly wrong. Maybe try again?');
+      } else if (authUser.token) {
+        setRegistered(true);
+      }
+    }
+  }, [authUser]);
 
   const submit = async ({ username, email, password }) => {
     setErrorMessage(null);
-
-    try {
-      const { data } = await axios.post('users', {
-        name: username,
-        email,
-        password
-      });
-
-      setAuthToken(data.token);
-      setRegistered(true);
-    } catch (e) {
-      setErrorMessage('Something went terribly wrong. Maybe try again?');
-    }
-
+    registerUser({ username, email, password });
   }
 
   if (registered) {
@@ -48,4 +48,4 @@ const Join = ({ setAuthToken }) => {
   );
 };
 
-export default connect(undefined, { setAuthToken })(Join);
+export default connect(({ authUser }) => ({ authUser }), { registerUser })(Join);

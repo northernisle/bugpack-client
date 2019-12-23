@@ -1,31 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { setAuthToken } from '../../redux/actions';
-import axios from '../../utils/configs/axiosConfig';
+import { loginUser } from '../../redux/actions';
 import SignFlow from '../SignFlow';
 
 import styles from './login.module.scss';
 
-const Login = ({ setAuthToken }) => {
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState(null);
+const Login = ({ loginUser, authUser }) => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    if (!authUser) {
+      return;
+    }
+
+    if (!authUser.pending) {
+      if (authUser.error) {
+        setErrorMessage('Couldn\'t find an account matching those credentials.');
+      } else if (authUser.token) {
+        setLoggedIn(true);
+      }
+    }
+  }, [authUser]);
 
   const submit = async ({ email, password }) => {
     setErrorMessage(null);
 
-    try {
-      const { data } = await axios.post('users/login', {
-        email,
-        password
-      });
-
-      setAuthToken(data.token);
-      setLoggedIn(true);
-    } catch (e) {
-      setErrorMessage('Couldn\'t find an account matching those credentials.');
-    }
+    loginUser({ email, password });
   }
 
   if (loggedIn) {
@@ -47,4 +50,4 @@ const Login = ({ setAuthToken }) => {
   );
 };
 
-export default connect(undefined, { setAuthToken })(Login);
+export default connect(({ authUser }) => ({ authUser }), { loginUser })(Login);

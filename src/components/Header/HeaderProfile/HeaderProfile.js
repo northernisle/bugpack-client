@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { removeAuthToken } from '../../../redux/actions';
+import { removeAuthUser } from '../../../redux/actions';
 
 import styles from './headerprofile.module.scss';
 
-const HeaderProfile = ({ token, removeAuthToken }) => {
+const HeaderProfile = ({ user, removeAuthUser }) => {
   return (
     <div className={styles.container}>
-      {
-        !!token ?
-          <div className={styles.item} onClick={removeAuthToken}>Logout</div>
+      { 
+        !!user ?
+          <div className={styles.item} onClick={removeAuthUser}>Logout</div>
           :
           <>
             <Link to='/login' className={styles.item}>Sign in</Link>
@@ -22,7 +22,7 @@ const HeaderProfile = ({ token, removeAuthToken }) => {
 };
 
 const mapStateToProps = state => {
-  return { token: state.authToken };
+  return { user: state?.authUser?.user };
 }
 
-export default connect(mapStateToProps, { removeAuthToken })(HeaderProfile);
+export default connect(mapStateToProps, { removeAuthUser })(HeaderProfile);

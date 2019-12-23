@@ -4,11 +4,11 @@ import store from '../../index';
 const api = axios.create();
 
 setTimeout(() => {
-  const { authToken } = store.getState();
+  const { authUser } = store.getState();
 
   api.defaults.baseURL = process.env.REACT_APP_API_URL;
 
-  updateToken(authToken);
+  updateToken(authUser?.token);
 }, 0); // Pushing this to the end of the call stack in order for the store to initialize
 
 export const updateToken = (token) => {

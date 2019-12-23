@@ -11,7 +11,7 @@ import './utils/styles/global.scss';
 
 import App from './components/App';
 
-const composeEnchancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnchancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?? compose;
 const store = createStore(reducers, composeEnchancers(applyMiddleware(thunk)));
 
 ReactDOM.render(

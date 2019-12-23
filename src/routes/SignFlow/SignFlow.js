@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import TextInput from '../../components/Forms/TextInput';
 import PasswordInput from '../../components/Forms/PasswordInput';
@@ -9,6 +9,13 @@ import styles from './signInFlow.module.scss';
 
 const SignFlow = ({ header, messageSlot, hideUsername, submitCallback, errorMessage }) => {
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(true);
+
+  useEffect(() => {
+    return () => {
+      setMounted(false);
+    }
+  }, []);
 
   const formRefs = {
     username: useRef(),
@@ -40,7 +47,10 @@ const SignFlow = ({ header, messageSlot, hideUsername, submitCallback, errorMess
         submitCallback({ username, email, password });
       }
     }
-    setLoading(false);
+
+    if (mounted) {
+      setLoading(false);
+    }
   }
 
   return (

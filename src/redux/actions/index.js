@@ -1,25 +1,65 @@
-import { AUTH_TOKEN_SET, AUTH_TOKEN_GET, AUTH_TOKEN_REMOVE } from './actionTypes';
+import {
+  AUTH_USER_SET,
+  AUTH_USER_GET,
+  AUTH_USER_REMOVE
+} from './actionTypes';
 import axios from '../../utils/configs/axiosConfig';
 
-export const setAuthToken = (token) => {
-  return {
-    type: AUTH_TOKEN_SET,
-    payload: token
-  }
-}
+const asyncAction = async (dispatch, actionType, requestCallback) => {
+  dispatch({
+    type: actionType,
+    status: 'pending',
+  });
 
-export const getAuthToken = () => {
-  return {
-    type: AUTH_TOKEN_GET,
-    payload: null
-  }
-}
+  let response = null;
+  let error = null;
+  let status = null;
 
-export const removeAuthToken = () => async dispatch => {
-  await axios.get('/users/logout');
+  try {
+    ({ data: response } = await requestCallback());
+
+    status = 'success';
+  } catch (e) {
+    error = e;
+    status = 'error';
+  }
 
   dispatch({
-    type: AUTH_TOKEN_REMOVE,
+    type: actionType,
+    status,
+    error,
+    response
+  });
+}
+
+export const loginUser = ({ email, password }) => async dispatch => {
+  asyncAction(dispatch, AUTH_USER_SET, () => {
+    return axios.post('users/login', {
+      email,
+      password
+    });
+  });
+}
+
+export const registerUser = ({ username, email, password }) => async dispatch => {
+  asyncAction(dispatch, AUTH_USER_SET, () => {
+    return axios.post('users', {
+      name: username,
+      email,
+      password
+    });
+  });
+}
+
+export const getAuthUser = () => {
+  return {
+    type: AUTH_USER_GET,
     payload: null
+  }
+}
+
+export const removeAuthUser = () => async dispatch => {
+  asyncAction(dispatch, AUTH_USER_REMOVE, () => {
+    return axios.get('/users/logout');
   });
 }

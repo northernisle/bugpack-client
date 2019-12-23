@@ -1,3 +1,3 @@
-export const AUTH_TOKEN_SET = 'AUTH_TOKEN_SET';
-export const AUTH_TOKEN_GET = 'AUTH_TOKEN_GET';
-export const AUTH_TOKEN_REMOVE = 'AUTH_TOKEN_REMOVE';
+export const AUTH_USER_SET = 'AUTH_USER_SET';
+export const AUTH_USER_GET = 'AUTH_USER_GET';
+export const AUTH_USER_REMOVE = 'AUTH_USER_REMOVE';
