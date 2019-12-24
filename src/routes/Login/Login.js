@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { FormControlLabel, Checkbox } from '@material-ui/core';
+
 import { loginUser } from '../../redux/actions';
 import SignFlow from '../SignFlow';
 
 import styles from './login.module.scss';
 
 const Login = ({ loginUser, authUser }) => {
+  const [rememberMe, setRememberMe] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -28,7 +31,7 @@ const Login = ({ loginUser, authUser }) => {
   const submit = async ({ email, password }) => {
     setErrorMessage(null);
 
-    loginUser({ email, password });
+    loginUser({ email, password, rememberMe });
   }
 
   if (loggedIn) {
@@ -40,9 +43,17 @@ const Login = ({ loginUser, authUser }) => {
       hideUsername
       header={'Sign in'}
       messageSlot={
-        <p className={styles.signInMessage}>
-          Need an account? <Link className={styles.signInLink} to='/join'>Sign up</Link>.
-        </p>
+        <div className={styles.extra}>
+          <FormControlLabel
+            control={
+              <Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />
+            }
+            label="Remember me"
+          />
+          <p>
+            Need an account? <Link className={styles.signInLink} to='/join'>Sign up</Link>.
+          </p>
+        </div>
       }
       errorMessage={errorMessage}
       submitCallback={data => submit(data)}

@@ -56,7 +56,7 @@ const SignFlow = ({ header, messageSlot, hideUsername, submitCallback, errorMess
   return (
     <>
       <h1>{header}</h1>
-      <form className={styles.form} noValidate='novalidate'>
+      <form className={styles.form} noValidate>
         {
           !hideUsername &&
           <TextInput

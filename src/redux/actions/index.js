@@ -32,11 +32,12 @@ const asyncAction = async (dispatch, actionType, requestCallback) => {
   });
 }
 
-export const loginUser = ({ email, password }) => async dispatch => {
+export const loginUser = ({ email, password, rememberMe }) => async dispatch => {
   asyncAction(dispatch, AUTH_USER_SET, () => {
     return axios.post('users/login', {
       email,
-      password
+      password,
+      rememberMe
     });
   });
 }

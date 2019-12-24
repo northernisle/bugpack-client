@@ -1,6 +1,13 @@
-.signInMessage {
-  align-self: flex-end;
+.extra {
   margin: 0 0 10px 0 !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  & > * {
+    margin: 0;
+  }
 }
 
 .signInLink {
