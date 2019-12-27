@@ -6,7 +6,7 @@ const processAuthUser = (state = {
   token: null,
   user: null,
   error: null
-}, action, sideEffect) => {
+}, action, successSideEffect, errorSideEffect) => {
   switch (action.status) {
 
     case 'pending':
@@ -15,7 +15,7 @@ const processAuthUser = (state = {
     case 'success':
       const { response } = action;
 
-      !!sideEffect && sideEffect();
+      !!successSideEffect && successSideEffect();
       updateToken(response?.token);
 
       return {
@@ -26,6 +26,8 @@ const processAuthUser = (state = {
       };
 
     case 'error':
+      !!errorSideEffect && errorSideEffect();
+
       return {
         pending: false,
         token: null,
@@ -50,9 +52,11 @@ const authUser = (authUser = null, action) => {
       return authUser ?? JSON.parse(window.localStorage.getItem('authUser'));
 
     case AUTH_USER_REMOVE:
-      return processAuthUser(authUser, action, () => {
+      const clearLocalStorage = () => {
         window.localStorage.removeItem('authUser');
-      });
+      };
+
+      return processAuthUser(authUser, action, clearLocalStorage, clearLocalStorage);
 
     default:
       return authUser;

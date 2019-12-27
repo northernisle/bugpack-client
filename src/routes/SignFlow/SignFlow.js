@@ -9,13 +9,12 @@ import styles from './signInFlow.module.scss';
 
 const SignFlow = ({ header, messageSlot, hideUsername, submitCallback, errorMessage }) => {
   const [loading, setLoading] = useState(false);
-  const [mounted, setMounted] = useState(true);
 
   useEffect(() => {
-    return () => {
-      setMounted(false);
+    if (errorMessage) {
+      setLoading(false);
     }
-  }, []);
+  }, [errorMessage]);
 
   const formRefs = {
     username: useRef(),
@@ -46,10 +45,6 @@ const SignFlow = ({ header, messageSlot, hideUsername, submitCallback, errorMess
         const [username, email, password] = valueArray;
         submitCallback({ username, email, password });
       }
-    }
-
-    if (mounted) {
-      setLoading(false);
     }
   }
 
@@ -90,7 +85,7 @@ const SignFlow = ({ header, messageSlot, hideUsername, submitCallback, errorMess
         />
         {messageSlot}
         <div className={styles.button}>
-          <LoadingButton text={'Sign up'} loading={loading} onClick={e => submit(e)} />
+          <LoadingButton text={header} loading={loading} onClick={e => submit(e)} />
         </div>
         {
           errorMessage &&

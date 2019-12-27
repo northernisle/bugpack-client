@@ -30,7 +30,6 @@ const Login = ({ loginUser, authUser }) => {
 
   const submit = async ({ email, password }) => {
     setErrorMessage(null);
-
     loginUser({ email, password, rememberMe });
   }
 

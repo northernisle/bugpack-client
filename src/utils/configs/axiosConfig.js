@@ -1,7 +1,16 @@
 import axios from 'axios';
 import store from '../../index';
+import history from './history';
 
 const api = axios.create();
+
+api.interceptors.response.use(undefined, error => {
+  if (error?.response?.status === 401) {
+    history.push('/login');
+  }
+
+  return Promise.reject(error);
+});
 
 setTimeout(() => {
   const { authUser } = store.getState();

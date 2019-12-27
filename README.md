@@ -2,7 +2,7 @@
 
 A soon-to-be simple bug tracker, currently under development.  
 Written in React using Redux and SASS, bootstrapped with Create React App.
-The [back-end](https://github.com/northernisle/bugpack-api) is written in Typescript on top of Node.js.
+The [back-end](https://github.com/northernisle/bugpack-api) is written in TypeScript on top of Node.js.
 
 ### Prerequisites
 
