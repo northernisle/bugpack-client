@@ -45,6 +45,8 @@ const SignFlow = ({ header, messageSlot, hideUsername, submitCallback, errorMess
         const [username, email, password] = valueArray;
         submitCallback({ username, email, password });
       }
+    } else {
+      setLoading(false);
     }
   }
 

@@ -10,7 +10,7 @@ import SignFlow from '../SignFlow';
 import styles from './login.module.scss';
 
 const Login = ({ loginUser, authUser }) => {
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
