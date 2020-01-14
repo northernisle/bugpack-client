@@ -1,7 +1,8 @@
 import {
   AUTH_USER_SET,
   AUTH_USER_GET,
-  AUTH_USER_REMOVE
+  AUTH_USER_REMOVE,
+  AUTH_USER_CLEAR_ERROR
 } from './actionTypes';
 import axios from '../../utils/configs/axiosConfig';
 
@@ -63,4 +64,11 @@ export const removeAuthUser = () => async dispatch => {
   asyncAction(dispatch, AUTH_USER_REMOVE, () => {
     return axios.get('/users/logout');
   });
+}
+
+export const clearAuthUserError = () => {
+  return {
+    type: AUTH_USER_CLEAR_ERROR,
+    payload: null
+  }
 }

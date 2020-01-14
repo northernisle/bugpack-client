@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 
 import { FormControlLabel, Checkbox } from '@material-ui/core';
 
-import { loginUser } from '../../redux/actions';
+import { loginUser, clearAuthUserError } from '../../redux/actions';
 import SignFlow from '../SignFlow';
 
 import styles from './login.module.scss';
 
-const Login = ({ loginUser, authUser }) => {
+const Login = ({ loginUser, clearAuthUserError, authUser }) => {
   const [rememberMe, setRememberMe] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -22,11 +22,12 @@ const Login = ({ loginUser, authUser }) => {
     if (!authUser.pending) {
       if (authUser.error) {
         setErrorMessage('Couldn\'t find an account matching those credentials.');
+        clearAuthUserError();
       } else if (authUser.token) {
         setLoggedIn(true);
       }
     }
-  }, [authUser]);
+  }, [authUser, clearAuthUserError]);
 
   const submit = async ({ email, password }) => {
     setErrorMessage(null);
@@ -60,4 +61,4 @@ const Login = ({ loginUser, authUser }) => {
   );
 };
 
-export default connect(({ authUser }) => ({ authUser }), { loginUser })(Login);
+export default connect(({ authUser }) => ({ authUser }), { loginUser, clearAuthUserError })(Login);

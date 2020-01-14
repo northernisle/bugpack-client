@@ -1,4 +1,4 @@
-import { AUTH_USER_SET, AUTH_USER_GET, AUTH_USER_REMOVE } from '../actions/actionTypes';
+import { AUTH_USER_SET, AUTH_USER_GET, AUTH_USER_REMOVE, AUTH_USER_CLEAR_ERROR } from '../actions/actionTypes';
 import { updateToken } from '../../utils/configs/axiosConfig';
 
 const processAuthUser = (state = {
@@ -57,6 +57,9 @@ const authUser = (authUser = null, action) => {
       };
 
       return processAuthUser(authUser, action, clearLocalStorage, clearLocalStorage);
+
+    case AUTH_USER_CLEAR_ERROR:
+      return { ...authUser, error: null };
 
     default:
       return authUser;

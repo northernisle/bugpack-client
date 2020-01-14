@@ -4,7 +4,15 @@ import history from './history';
 
 const api = axios.create();
 
-api.interceptors.response.use(undefined, error => {
+api.interceptors.response.use(res => {
+  const token = res?.data?.token;
+
+  if (token) {
+    updateToken(token);
+  }
+
+  return res;
+}, error => {
   if (error?.response?.status === 401) {
     history.push('/login');
   }

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { registerUser } from '../../redux/actions';
+import { registerUser, clearAuthUserError } from '../../redux/actions';
 import SignFlow from '../SignFlow';
 
 import styles from './join.module.scss';
 
-const Join = ({ registerUser, authUser }) => {
+const Join = ({ registerUser, clearAuthUserError, authUser }) => {
   const [registered, setRegistered] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -19,11 +19,12 @@ const Join = ({ registerUser, authUser }) => {
     if (!authUser.pending) {
       if (authUser.error) {
         setErrorMessage('Something went terribly wrong. Maybe try again?');
+        clearAuthUserError();
       } else if (authUser.token) {
         setRegistered(true);
       }
     }
-  }, [authUser]);
+  }, [authUser, clearAuthUserError]);
 
   const submit = async ({ username, email, password }) => {
     setErrorMessage(null);
@@ -48,4 +49,4 @@ const Join = ({ registerUser, authUser }) => {
   );
 };
 
-export default connect(({ authUser }) => ({ authUser }), { registerUser })(Join);
+export default connect(({ authUser }) => ({ authUser }), { registerUser, clearAuthUserError })(Join);
